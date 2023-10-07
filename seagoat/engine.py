@@ -132,6 +132,8 @@ class Engine:
             chunk = chunks_to_process.pop(0)
             self.process_chunk(chunk)
 
+        self.persist_cache()
+
         return chunks_to_process
 
     def query(self, query: str):
