@@ -75,6 +75,7 @@ class TaskQueue(BaseQueue):
                 self.enqueue(
                     "analyze_chunk", chunk, priority=LOW_PRIORITY, wait_for_result=False
                 )
+            self.enqueue("persist_cache", priority=LOW_PRIORITY, wait_for_result=False)
         else:
             logging.info("Analyzed all chunks!")
 
@@ -85,6 +86,10 @@ class TaskQueue(BaseQueue):
 
         if self._task_queue.qsize() == 0:
             logging.info("Analyzed all chunks!")
+
+    def handle_persist_cache(self, context):
+        logging.info("Persisting cache")
+        context["seagoat_engine"].persist_cache()
 
     def handle_query(self, context, **kwargs):
         context["seagoat_engine"].query(kwargs["query"])

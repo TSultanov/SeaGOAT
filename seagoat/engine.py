@@ -106,6 +106,7 @@ class Engine:
         if chunk.chunk_id in self.cache.data["chunks_not_yet_analyzed"]:
             self.cache.data["chunks_not_yet_analyzed"].remove(chunk.chunk_id)
 
+    def persist_cache(self):
         self.cache.persist()
 
     def _create_vector_embeddings(self, minimum_chunks_to_analyze=None):
