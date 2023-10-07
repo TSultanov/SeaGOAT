@@ -76,15 +76,21 @@ class File:
         return FileChunk(self, line_number, self._format_chunk_summary(relevant_lines))
 
     def _line_has_relevant_data(self, line: str):
-        return sum(c.isalnum() for c in line) > 3
+        alnumcount = 0
+        for c in line:
+            if c.isalnum():
+                alnumcount += 1
+            if alnumcount > 3:
+                return True
+        return False
 
     def get_chunks(self):
         lines = self._get_file_lines()
-        return [
-            self._get_chunk_for_line(line_number, lines)
-            for line_number in lines.keys()
-            if self._line_has_relevant_data(lines[line_number])
-        ]
+        ret = []
+        for line_number in lines.keys():
+            if self._line_has_relevant_data(lines[line_number]):
+                ret.append(self._get_chunk_for_line(line_number, lines))
+        return ret
 
 
 # pylint: disable=too-few-public-methods
